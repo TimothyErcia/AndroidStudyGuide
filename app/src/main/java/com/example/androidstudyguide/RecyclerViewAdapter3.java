@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 
 import java.util.ArrayList;
 
@@ -38,8 +40,12 @@ public class RecyclerViewAdapter3 extends RecyclerView.Adapter<RecyclerViewAdapt
     @Override
     public void onBindViewHolder(@NonNull mViewHolder holder, int position) {
         holder.titleTextView.setText(photosList.get(position).getTitle());
+        GlideUrl url = new GlideUrl(photosList.get(position).getUrl(), new LazyHeaders.Builder()
+                .addHeader("User-Agent", "your-user-agent")
+                .build());
         Glide.with(context)
-                .load(photosList.get(position).getUrl())
+                .asBitmap()
+                .load(url)
                 .error(R.drawable.ic_launcher_foreground)
                 .into(holder.imageView);
     }
